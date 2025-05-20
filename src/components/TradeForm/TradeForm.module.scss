@@ -1,0 +1,46 @@
+.form {
+  margin-top: 20px;
+  box-shadow: 0px 8px 18px -12px rgba(66, 68, 90, 1);
+  width: 30%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input {
+  padding: 10px 20px;
+  width: 100%;
+  font-size: 1.1rem;
+  padding-right: 60px;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.inputInfo {
+  position: absolute;
+  top: 25%;
+  right: 10px;
+  font-weight: bold;
+}
+
+.button {
+  background-color: #0070ff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border: none;
+}
+
+.tradeIcon {
+  max-width: 40px;
+  transform: rotate(90deg);
+}
+
+.changeButton {
+  cursor: pointer;
+  width: 30%;
+  align-self: center;
+}

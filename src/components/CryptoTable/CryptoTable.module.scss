@@ -1,0 +1,52 @@
+.tableWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.table {
+  width: 80vw;
+  height: 80vh;
+  margin-top: 20px;
+  background-color: #fff;
+  box-shadow: 0px 8px 18px -12px rgba(66, 68, 90, 1);
+
+  border-collapse: collapse;
+
+  &Item {
+    text-align: center;
+  }
+
+  & tr:nth-child(even) {
+    background-color: #f6f6f6;
+  }
+}
+
+.headerRow {
+  background-color: #3e3a3a;
+  color: #fff;
+  th {
+    padding: 20px 0;
+  }
+}
+
+.buttonsWrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.tableButton {
+  background-color: #0070ff;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  font-size: 1.2rem;
+  transition: 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+    transition: 0.3s;
+  }
+}
