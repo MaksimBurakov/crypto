@@ -6,21 +6,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .navigation {
   display: flex;
   gap: 40px;
 
-  & a {
+  & a,
+  & .linkButton {
     font-size: 1.2rem;
     transition: 0.3s;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
 
     &:hover {
       transition: 0.3s;
       opacity: 0.5;
     }
   }
+}
+
+.userInfo {
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
 
 .logButton {
@@ -40,6 +56,6 @@
   }
 }
 
-.active {
+a.active {
   color: rgb(25, 238, 238);
 }

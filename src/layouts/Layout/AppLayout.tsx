@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import { Header } from '../../components/Header/Header';
-import styles from './Layout.module.scss';
+import styles from './AppLayout.module.scss';
 
-export default function CryptoLayout() {
+export default function AppLayout() {
   return (
     <div>
       <Header />

@@ -6,18 +6,29 @@ import styles from './CryptoTable.module.scss';
 
 interface ICryptoTableProps {
   assets: IAsset[];
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  onLoadMore: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
 }
 
-export const CryptoTable = ({ assets, setPage }: ICryptoTableProps) => {
+export const CryptoTable = ({
+  assets,
+  onLoadMore,
+  hasNextPage,
+  isFetchingNextPage,
+}: ICryptoTableProps) => {
   const [sortBy, setSortBy] = useState<'name' | 'price'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [tradeTypeMap, setTradeTypeMap] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    setTradeTypeMap(
-      Object.fromEntries(assets.map((asset) => [asset.id, 'Buy']))
-    );
+    setTradeTypeMap((prev) => {
+      const updated = { ...prev };
+      assets.forEach((asset) => {
+        if (!updated[asset.id]) updated[asset.id] = 'Buy';
+      });
+      return updated;
+    });
   }, [assets]);
 
   const sortedAssets = useSortedAssets(assets, sortBy, sortOrder);
@@ -62,18 +73,15 @@ export const CryptoTable = ({ assets, setPage }: ICryptoTableProps) => {
         </tbody>
       </table>
       <div className={styles.buttonsWrapper}>
-        <button
-          className={styles.tableButton}
-          onClick={() => setPage((prev) => prev - 1)}
-        >
-          &#60;
-        </button>
-        <button
-          className={styles.tableButton}
-          onClick={() => setPage((prev) => prev + 1)}
-        >
-          &#62;
-        </button>
+        {hasNextPage && (
+          <button
+            className={styles.tableButton}
+            onClick={onLoadMore}
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? 'Loading...' : 'Load more'}
+          </button>
+        )}
       </div>
     </div>
   );

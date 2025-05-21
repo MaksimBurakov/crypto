@@ -1,34 +1,39 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
-import { useNavigate } from 'react-router';
+import { useModalStore } from '../../store/useModalStore';
+import { validateLoginForm } from './FormValidator';
 import styles from './LoginForm.module.scss';
 
+const INITIAL_FORM_STATE = {
+  email: '',
+  password: '',
+  error: '',
+};
+
 export const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [form, setForm] = useState(INITIAL_FORM_STATE);
 
   const { login } = useAuthStore();
+  const { closeModal } = useModalStore();
 
-  const navigate = useNavigate();
-
-  const handleEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePassword = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
+  const handleFormChange = (
+    field: keyof typeof INITIAL_FORM_STATE,
+    value: string
+  ) => {
+    setForm((prevForm) => ({ ...prevForm, [field]: value }));
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (email && password) {
-      login(email, password);
-      navigate('/');
-    } else {
-      setError('Both email and password fields are required');
+    const errorMessage = validateLoginForm(form);
+    if (errorMessage) {
+      setForm((prevForm) => ({ ...prevForm, error: errorMessage }));
+      return;
     }
+
+    login(form.email, form.password);
+    closeModal();
   };
 
   return (
@@ -41,8 +46,8 @@ export const LoginForm = () => {
           id="email"
           type="email"
           placeholder="Enter email"
-          value={email}
-          onChange={handleEmail}
+          value={form.email}
+          onChange={(e) => handleFormChange('email', e.target.value)}
           className={styles.input}
         />
       </div>
@@ -54,21 +59,16 @@ export const LoginForm = () => {
           id="password"
           type="password"
           placeholder="Enter password"
-          value={password}
-          onChange={handlePassword}
+          value={form.password}
+          onChange={(e) => handleFormChange('password', e.target.value)}
           className={styles.input}
         />
       </div>
-      <p className={styles.error}>{error}</p>
+      {form.error && <p className={styles.error}>{form.error}</p>}
 
-      <div className={styles.buttonWrapper}>
-        <button type="submit" className={styles.logButton}>
-          Log in
-        </button>
-        <button onClick={() => navigate('/')} className={styles.backButton}>
-          Home page
-        </button>
-      </div>
+      <button type="submit" className={styles.logButton}>
+        Log in
+      </button>
     </form>
   );
 };

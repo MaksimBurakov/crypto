@@ -8,9 +8,13 @@ const options = {
   },
 };
 
-export const fetchAssets = async (page: string) => {
+export const fetchAssets = async ({
+  pageParam = 1,
+}: {
+  pageParam?: number;
+}) => {
   const res = await fetch(
-    `https://data.messari.io/api/v1/assets?limit=10&page=${page}`,
+    `https://data.messari.io/api/v1/assets?limit=10&page=${pageParam}`,
     options
   );
   if (!res.ok) throw new Error('Error');
