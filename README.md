@@ -1,32 +1,77 @@
-Overview:
-Crypto Trading App is a React-based application that enables users to convert cryptocurrency to fiat currency and vice versa using real-time exchange rates. It provides a dynamic input field that updates the conversion value automatically and allows users to swap between crypto and fiat modes.
+🚀 Trading Application
 
-Installation & Setup:
+📌 Project Overview
+This is a cryptocurrency trading application built using React, TypeScript, Vite, Zustand, and React Query. It enables users to view a list of cryptocurrency assets, sort them by name or price, and execute buy or sell transactions. Trading functionality is available only after logging in through a simulated authentication system for demonstration purposes.
 
-1. Install dependencies
-   bash
-   npm install
+🚀 Getting Started
 
-2. Create a .env file
-   In the root directory, create a .env file and add API keys:
+🛠 Installation
+Clone the repository:
 
-env
-VITE_MESSARI_API_KEY=your_api_key_here
-VITE_EXCHANGE_RATE_KEY=your_api_key_here
+```sh
+git clone https://github.com/your-repo/Crypto-trading-app.git
+cd crypto
+```
+Install dependencies:
 
-3. Start the application
-   bash
-   npm run dev
+```sh
+npm install
+```
+⚙ Configuration
+Create a .env file in the root directory based on .env.example:
 
-Technology Stack:
 
-React + TypeScript: Provides strong typing and improved code reliability.
+🚀 Running the Development Server
+Start the local development server using Vite:
 
-React Query: Efficiently handles API calls and caching.
+```sh
+npm run dev
+```
+This will launch the application and open it in your default browser.
 
-SCSS: Modular styling for cleaner UI design.
+🏗 Building for Production
+To generate an optimized production build using Vite, run:
 
-Implementation Details:
+```sh
+npm run build
+```
+The compiled files will be located in the dist/ directory.
 
-Why this approach?
-✅ React Query ensures automatic caching and refetching for API calls. ✅ TypeScript prevents runtime errors and improves maintainability. ✅ SCSS enhances style structuring with better reuse and modularity.
+🔧 Key Technologies
+
+✔ React – Component-based UI framework 
+
+✔ TypeScript – Static type-checking for better development experience 
+
+✔ Vite – Fast build tool with hot-reload capabilities
+
+✔ Zustand – Minimalistic state management solution
+
+✔ React Query – Efficient data fetching with caching and background updates
+
+✔ SCSS – Structured styling with variables and mixins
+
+📂 Folder Structure
+/assets      - Images for application  
+/components  - Reusable UI components  
+/routes      - Page routing management  
+/hooks       - Custom React hooks  
+/types       - TypeScript interfaces for assets types
+/pages       - Page components such as Home and Trade  
+/store       - Global state management using Zustand  
+/api         - Functionality related to client-server communication 
+App.tsx      - Main application entry point  
+main.tsx     - Initial React setup  
+
+
+📌 Design Decisions & Implementation Choices
+
+✔ React + TypeScript → Improves scalability and reduces bugs 
+
+✔ Vite → Provides ultra-fast development and optimized production builds 
+
+✔ Zustand → Simple state management for efficient app performance
+
+✔ React Query → Handles API caching, retries, and data synchronization 
+
+✔ SCSS & CSS Modules → Scoped styles with maintainable structure
