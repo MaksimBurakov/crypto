@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { IAsset } from '../../types/assetTypes';
-import { Dropdown } from '../DropDown/DropDown';
+import { CryptoRow } from '../CryptoTableRow/CryptoRow';
+import { useSortedAssets } from '../../hooks/useSortedAssets';
 import styles from './CryptoTable.module.scss';
 
 interface ICryptoTableProps {
@@ -11,35 +12,26 @@ interface ICryptoTableProps {
 export const CryptoTable = ({ assets, setPage }: ICryptoTableProps) => {
   const [sortBy, setSortBy] = useState<'name' | 'price'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [tradeTypeMap, setTradeTypeMap] = useState<Record<string, string>>({});
 
-  const sortedAssets = [...assets].sort((a, b) => {
-    if (sortBy === 'name') {
-      return sortOrder === 'asc'
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name);
-    } else {
-      return sortOrder === 'asc'
-        ? (a.metrics?.market_data?.price_usd ?? 0) -
-            (b.metrics?.market_data?.price_usd ?? 0)
-        : (b.metrics?.market_data?.price_usd ?? 0) -
-            (a.metrics?.market_data?.price_usd ?? 0);
-    }
-  });
+  useEffect(() => {
+    setTradeTypeMap(
+      Object.fromEntries(assets.map((asset) => [asset.id, 'Buy']))
+    );
+  }, [assets]);
+
+  const sortedAssets = useSortedAssets(assets, sortBy, sortOrder);
+
+  const sortOrderArrow = sortOrder === 'asc' ? '↑' : '↓';
+  const sortOrderAscDesc = sortOrder === 'asc' ? 'desc' : 'asc';
 
   const handleSort = (criteria: 'name' | 'price') => {
-    if (criteria === sortBy) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortBy(criteria);
-      setSortOrder('asc');
-    }
+    setSortOrder(sortBy === criteria ? sortOrderAscDesc : 'asc');
+    setSortBy(criteria);
   };
 
-  const getSortIndicator = (criteria: 'name' | 'price') => {
-    if (sortBy === criteria) {
-      return sortOrder === 'asc' ? '↑' : '↓';
-    }
-    return '';
+  const handleTradeTypeChange = (assetId: string, selected: string) => {
+    setTradeTypeMap((prev) => ({ ...prev, [assetId]: selected }));
   };
 
   return (
@@ -48,27 +40,24 @@ export const CryptoTable = ({ assets, setPage }: ICryptoTableProps) => {
         <thead>
           <tr className={styles.headerRow}>
             <th onClick={() => handleSort('name')} className={styles.sortable}>
-              Name {getSortIndicator('name')}
+              Name {sortBy === 'name' ? sortOrderArrow : ''}
             </th>
             <th onClick={() => handleSort('price')} className={styles.sortable}>
-              Price (USD) {getSortIndicator('price')}
+              Price (USD) {sortBy === 'price' ? sortOrderArrow : ''}
             </th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {sortedAssets.map((asset) => (
-            <tr key={asset.id}>
-              <td className={styles.tableItem}>
-                {asset.name} ({asset.symbol})
-              </td>
-              <td className={styles.tableItem}>
-                {asset.metrics?.market_data?.price_usd?.toFixed(2) ?? 'N/A'}
-              </td>
-              <td className={styles.tableItem}>
-                <Dropdown options={['Buy', 'Sell']} onSelect={() => {}} />
-              </td>
-            </tr>
+            <CryptoRow
+              key={asset.id}
+              asset={asset}
+              tradeType={tradeTypeMap[asset.id]}
+              onTradeTypeChange={(selected) =>
+                handleTradeTypeChange(asset.id, selected)
+              }
+            />
           ))}
         </tbody>
       </table>

@@ -1,5 +1,9 @@
 interface IMarketData {
   price_usd?: number;
+  ohlcv_last_1_hour: {
+    high?: number;
+    low?: number;
+  };
 }
 
 interface IMetrics {

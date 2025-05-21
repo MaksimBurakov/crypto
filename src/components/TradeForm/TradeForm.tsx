@@ -14,7 +14,11 @@ export const TradeForm = ({ symbols }: ITradeFormProps) => {
   const [selectedCrypto, setSelectedCrypto] = useState('BTC');
   const [isCryptoToFiat, setIsCryptoToFiat] = useState(true);
 
-  const { data: convertedAmount } = useQuery({
+  const {
+    data: convertedAmount,
+    isFetching,
+    isError,
+  } = useQuery({
     queryKey: ['exchangeRate', selectedCrypto, cryptoAmount, isCryptoToFiat],
     queryFn: () =>
       fetchExchangeRate({
@@ -25,10 +29,18 @@ export const TradeForm = ({ symbols }: ITradeFormProps) => {
     enabled: cryptoAmount > 0,
   });
 
-  const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCryptoAmount(+e.target.value);
+  const getConvertedValue = () => {
+    if (isFetching) return 'Loading...';
+    if (isError) return 'Error';
+    return convertedAmount ?? '';
   };
 
+  const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value)) {
+      setCryptoAmount(+value);
+    }
+  };
   const handleSwap = () => {
     setIsCryptoToFiat(!isCryptoToFiat);
     setCryptoAmount(convertedAmount ?? 0);
@@ -59,13 +71,11 @@ export const TradeForm = ({ symbols }: ITradeFormProps) => {
         <img src={tradeIcon} alt="tradeIcon" className={styles.tradeIcon} />
       </button>
       <div className={styles.inputWrapper}>
-        <input value={convertedAmount ?? 0} className={styles.input} disabled />
+        <input value={getConvertedValue()} className={styles.input} disabled />
         <span className={styles.inputInfo}>
           {isCryptoToFiat ? 'USD' : selectedCrypto}
         </span>
       </div>
-
-      <button className={styles.button}>Exchange</button>
     </form>
   );
 };
